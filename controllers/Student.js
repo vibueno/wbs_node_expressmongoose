@@ -2,8 +2,8 @@ const Student = require("../models/Student");
 
 module.exports = {
   getAll: async (req, res) => {
-    const dbRes = await Student.find({});
-    res.json(dbRes);
+    const students = await Student.find({});
+    res.json(students);
   },
 
   create: async (req, res) => {
@@ -18,10 +18,11 @@ module.exports = {
 
   update: async (req, res) => {
     const modification = await Student.updateMany(
-      { name: "John" },
-      { $set: { name: "Lola" } }
+      { name: "Yo!" },
+      { $set: { name: "Tu!" } }
     );
 
-    res.status(200).send(modification);
+    const students = await Student.find({});
+    res.status(200).json(students);
   },
 };
