@@ -38,21 +38,31 @@ module.exports = {
   },
 
   update: async (req, res) => {
+    const oldName = "Whatever!";
+    const newName = "Yes!!!!";
+
     try {
       const result = await Student.updateMany(
-        { name: "Yo!" },
-        { $set: { name: "Tu!" } }
+        { name: oldName },
+        { $set: { name: newName } }
       );
 
-      const students = await Student.find({});
+      if (result.nModified == 0) {
+        return res.status(200).json({
+          status: 200,
+          message: "No students were modified",
+        });
+      }
 
-      res.status(200).json({
+      const students = await Student.find({ name: newName });
+
+      return res.status(200).json({
         status: 200,
-        message: "Students updated successfully",
+        message: `${result.nModified} Student(s) updated successfully`,
         data: students,
       });
     } catch (e) {
-      res
+      return res
         .status(500)
         .json({ status: 500, message: "Internal database error", error: e });
     }
